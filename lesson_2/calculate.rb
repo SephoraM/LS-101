@@ -14,10 +14,10 @@ operator = Kernel.gets().chomp()
 
 def operate(a, b, operator)
   case operator
-  when "add" then a + b
-  when "divide" then a.to_f / b.to_f
-  when "multiply" then a * b
-  when "subtract" then a - b
+  when "add"       then a + b
+  when "divide"    then a.to_f / b.to_f
+  when "multiply"  then a * b
+  when "subtract"  then a - b
   when "remainder" then a % b
   else
     Kernel.puts("Invalid input. Please type 'add', 'subtract','multiply','subtract', or 'remainder'.")
