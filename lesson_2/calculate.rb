@@ -28,10 +28,18 @@ end
 
 def operate(a, b, operator)
   case operator
-  when "add"       then a + b
-  when "multiply"  then a * b
-  when "subtract"  then a - b
-  when "divide"    then a.to_f / b.to_f
+  when "add"
+    prompt("adding two numbers...")
+    a + b
+  when "multiply"
+    prompt("multiplying two numbers...")
+    a * b
+  when "subtract"
+    prompt("subtracting two numbers...")
+    a - b
+  when "divide"
+    prompt("dividing two numbers...")
+    a.to_f / b.to_f
   else
     prompt("That is not a valid input.")
     prompt("Please type 'add', 'multiply', 'subtract', or 'divide'.")
@@ -58,7 +66,11 @@ loop do #main loop
   number1 = get_number("first")
   number2 = get_number("second")
 
-  prompt("Choose an operation to perform. ('add', 'multiply', 'subtract', or 'divide')")
+  operator_prompt = <<-MSG
+    Choose an operation to perform:
+      'add', 'multiply', 'subtract', or 'divide'
+  MSG
+  prompt(operator_prompt)
   operator = Kernel.gets().chomp()
 
   prompt("The result is #{operate(number1.to_i, number2.to_i, operator)}")
