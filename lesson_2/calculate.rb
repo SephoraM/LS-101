@@ -3,6 +3,9 @@
 # perform the operation on the two numbers
 # output the result
 
+require 'yaml'
+MESSAGES = YAML.load_file('calculator_messages.yml')
+
 def prompt(message)
   Kernel.puts("=> #{message}")
 end
@@ -20,7 +23,7 @@ def get_number(target_number)
     if valid_number?(number)
       break
     else
-      prompt("Oops, that's not a valid number. Please try again.")
+      prompt(MESSAGES['valid_number'])
     end
   end
   number
@@ -29,40 +32,39 @@ end
 def operate(a, b, operator)
   case operator
   when "add"
-    prompt("adding two numbers...")
+    prompt(MESSAGES['adding'])
     a + b
   when "multiply"
-    prompt("multiplying two numbers...")
+    prompt(MESSAGES['multiplying'])
     a * b
   when "subtract"
-    prompt("subtracting two numbers...")
+    prompt(MESSAGES['subtracting'])
     a - b
   when "divide"
-    prompt("dividing two numbers...")
+    prompt(MESSAGES['dividing'])
     a.to_f / b.to_f
   else
-    prompt("That is not a valid input.")
-    prompt("Please type 'add', 'multiply', 'subtract', or 'divide'.")
+    prompt(MESSAGES['invalid'])
     operator = Kernel.gets().chomp()
     operate(a, b, operator)
   end
 end
 
 # begin program
-prompt("Welcome to Calculator!")
+prompt(MESSAGES['welcome'])
 name = ''
 loop do
-  prompt("What is your name?")
+  prompt(MESSAGES['given_name'])
   name = Kernel.gets().chomp()
   if name.empty?
-    prompt("Please give me a valid name :)")
+    prompt(MESSAGES['valid_name'])
   else
     break
   end
 end
-prompt("Nice to meet you, #{name}")
+prompt(MESSAGES['greeting'] + name)
 
-loop do #main loop
+loop do # main loop
   number1 = get_number("first")
   number2 = get_number("second")
 
@@ -75,7 +77,7 @@ loop do #main loop
 
   prompt("The result is #{operate(number1.to_i, number2.to_i, operator)}")
 
-  prompt("Would you like to make another calculation? (Y for yes)")
+  prompt(MESSAGES['another'])
   another = Kernel.gets().chomp()
   break unless another.downcase.start_with?("y")
 end
