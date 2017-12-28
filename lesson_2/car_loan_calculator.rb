@@ -15,8 +15,8 @@ def number_of_months(years)
   years * 12
 end
 
-def payment_per_month(p, j, n)
-  p * (j / (1 - (1 + j)**-n))
+def payment_per_month(loan, rate, months)
+  loan * (rate / (1 - (1 + rate)**-months))
 end
 
 def prompt(string)
@@ -51,6 +51,6 @@ monthly_payment = payment_per_month(loan_amount.to_f,
                                     monthly_rate,
                                     duration_in_months.to_f)
 
-prompt("Your monthly payment will be $ #{format('%.2f', monthly_payment)}.")
+prompt("Your monthly payment will be $ #{format('%.2f', monthly_payment)}")
 
 # END
