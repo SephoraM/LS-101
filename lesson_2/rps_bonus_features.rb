@@ -102,6 +102,7 @@ loop do
   prompt("Do you want to play again? (Y for yes)")
   answer = Kernel.gets.chomp
   break unless answer.downcase.start_with?('y')
+  system('clear') || system('cls')
 end
 
 prompt("Thank you for playing! Have a nice day!")

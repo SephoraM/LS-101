@@ -56,4 +56,5 @@ loop do
   prompt("Would you like to make another calculation? (Y for yes)")
   continue = gets.chomp
   break unless continue.downcase.start_with?("y")
+  system('clear') || system('cls')
 end
