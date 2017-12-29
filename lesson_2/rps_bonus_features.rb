@@ -1,6 +1,5 @@
 VALID_CHOICES =
   {
-    choice_list: %w(rock paper scissors lizard spock),
     r: "rock",
     p: "paper",
     sc: "scissors",
@@ -39,7 +38,7 @@ def add_points(board, player, computer)
   if win?(player, computer)
     board[:human] += 1
   elsif win?(computer, player)
-    board[:human] += 1
+    board[:computer] += 1
   end
 end
 
@@ -52,7 +51,7 @@ def erase_score(board)
   board[:computer] = 0
 end
 
-prompt("Welcome to the game of #{VALID_CHOICES[:choice_list].join(', ')}!")
+prompt("Welcome to the game of #{VALID_CHOICES.values.join(', ')}!")
 prompt("Win five games and become the Grand Winner!")
 
 score_board =
@@ -75,13 +74,13 @@ loop do
 
   loop do
     prompt(choice_prompt)
-    choice = gets.chomp.to_sym
-    break if VALID_CHOICES.include?(choice)
+    choice = gets.chomp
+    break if VALID_CHOICES.include?(choice.to_sym)
     prompt("That is not a valid choice!")
   end
 
-  computer_choice = VALID_CHOICES[:choice_list].sample
-  player_choice = VALID_CHOICES[choice]
+  computer_choice = VALID_CHOICES.values.sample
+  player_choice = VALID_CHOICES[choice.to_sym]
 
   prompt("The computer chose #{computer_choice}. You chose #{player_choice}.")
 
@@ -92,10 +91,10 @@ loop do
   prompt("Your points: #{score_board[:human]}")
 
   if win_five?(score_board[:human])
-    prompt("You win the match!")
+    prompt("You have 5 points and win the match!")
     erase_score(score_board)
   elsif win_five?(score_board[:computer])
-    prompt("Computer wins the match!")
+    prompt("Computer has 5 points and wins the match!")
     erase_score(score_board)
   end
 
