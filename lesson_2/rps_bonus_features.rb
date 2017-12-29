@@ -35,8 +35,31 @@ def display_results(player, computer)
   end
 end
 
-player_points = 0
-computer_points = 0
+def add_points(board, player, computer)
+  if win?(player, computer)
+    board[:human] += 1
+  elsif win?(computer, player)
+    board[:human] += 1
+  end
+end
+
+def win_five?(points)
+  points == 5
+end
+
+def erase_score(board)
+  board[:human] = 0
+  board[:computer] = 0
+end
+
+prompt("Welcome to the game of #{VALID_CHOICES[:choice_list].join(', ')}!")
+prompt("Win five games and become the Grand Winner!")
+
+score_board =
+  {
+    human: 0,
+    computer: 0
+  }
 
 choice_prompt = <<-MSG
   Choose an operation to perform:
@@ -46,8 +69,6 @@ choice_prompt = <<-MSG
     'sc' for scissors
     'sp' for spock
 MSG
-
-prompt("Welcome to the game of #{VALID_CHOICES[:choice_list].join(', ')}!")
 
 loop do
   choice = ''
@@ -66,17 +87,16 @@ loop do
 
   display_results(player_choice, computer_choice)
 
-  player_points += 1 if win?(player_choice, computer_choice)
-  computer_points += 1 if win?(computer_choice, player_choice)
+  add_points(score_board, player_choice, computer_choice)
+  prompt("Computer points: #{score_board[:computer]}")
+  prompt("Your points: #{score_board[:human]}")
 
-  if player_points == 5
-    prompt("You are the grand winner!")
-    player_points = 0
-    computer_points = 0
-  elsif computer_points == 5
-    prompt("The computer is the grand winner!")
-    player_points = 0
-    computer_points = 0
+  if win_five?(score_board[:human])
+    prompt("You win the match!")
+    erase_score(score_board)
+  elsif win_five?(score_board[:computer])
+    prompt("Computer wins the match!")
+    erase_score(score_board)
   end
 
   prompt("Do you want to play again? (Y for yes)")
