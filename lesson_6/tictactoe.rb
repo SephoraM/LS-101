@@ -1,5 +1,3 @@
-require 'pry'
-
 INITIAL_PLAYER = 'choose'
 INITIAL_MARKER = ' '
 PLAYER_MARKER = 'X'
