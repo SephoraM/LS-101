@@ -71,16 +71,15 @@ def find_strategic_move(brd, current_player)
   winning_move.empty? ? nil : winning_move[0][0]
 end
 
+def find_next_move(brd)
+  brd[5] == INITIAL_MARKER ? 5 : empty_squares(brd).sample
+end
+
 def ai_places_piece!(brd)
-  if find_strategic_move(brd, COMPUTER_MARKER)
-    brd[find_strategic_move(brd, COMPUTER_MARKER)] = COMPUTER_MARKER
-  elsif find_strategic_move(brd, PLAYER_MARKER)
-    brd[find_strategic_move(brd, PLAYER_MARKER)] = COMPUTER_MARKER
-  elsif brd[5] == INITIAL_MARKER
-    brd[5] = COMPUTER_MARKER
-  else
-    brd[empty_squares(brd).sample] = COMPUTER_MARKER
-  end
+  selected_move = find_strategic_move(brd, COMPUTER_MARKER)
+  selected_move = find_strategic_move(brd, PLAYER_MARKER) unless selected_move
+  selected_move = selected_move ? selected_move : find_next_move(brd)
+  brd[selected_move] = COMPUTER_MARKER
 end
 
 def place_piece!(brd, current_player)
@@ -135,8 +134,8 @@ def determine_initial_player
       prompt("Who should start the game? ('c' for Computer, 'p' for Player)")
       choice = gets.chomp
 
-      return 'player' if choice == 'p'
-      return 'computer' if choice == 'c'
+      return 'player' if choice.downcase == 'p'
+      return 'computer' if choice.downcase == 'c'
 
       prompt("That is not a valid choice! Try Again.")
     end
@@ -150,7 +149,6 @@ loop do
   loop do
     board = initialize_board
     current_player = determine_initial_player
-    display_board(board)
 
     loop do
       display_board(board)
@@ -171,10 +169,16 @@ loop do
     break if winner_of_five(scoreboard)
 
     display_current_score(scoreboard)
-    prompt("Do you want to continue playing? (y/n)")
-    answer = gets.chomp
+    response = ''
 
-    break unless answer.downcase.start_with?('y')
+    loop do
+      prompt("Do you want to continue playing? (y/n)")
+      response = gets.chomp
+
+      break if response.downcase.start_with?('y', 'n')
+      prompt("That's not a valid answer. Try Again.")
+    end
+    break unless response.downcase.start_with?('y')
   end
 
   system('clear') || system('cls')
@@ -184,9 +188,15 @@ loop do
     prompt("There is no Grand Winner of this match!")
   end
 
-  prompt("Do you want to start a new game? (y/n)")
-  answer = gets.chomp
+  answer = ''
 
+  loop do
+    prompt("Do you want to start a new game? (y/n)")
+    answer = gets.chomp
+
+    break if answer.downcase.start_with?('y', 'n')
+    prompt("That's not a valid answer. Try Again.")
+  end
   break unless answer.downcase.start_with?('y')
 end
 
