@@ -91,7 +91,19 @@ def find_winner(player, dealer)
   end
 end
 
+def puts_with_newline(msg)
+  puts "#{msg}\n\n"
+end
+
+def declare_current_score(person, score)
+  puts_with_newline("--- #{person}'s cards have a combined" \
+                    " value of #{score} ---")
+end
+
 def declare_winner(player, dealer)
+  system('clear') || system('cls')
+  declare_current_score("Player", player)
+  declare_current_score("Dealer", dealer)
   winner = find_winner(player, dealer)
   puts winner.start_with?('P', 'D') ? "#{winner} Wins!" : "It's a tie!"
 end
@@ -105,18 +117,17 @@ def play_again?
     break if answer.downcase.start_with?('y', 'n')
     prompt("That's not a valid answer. Try again.")
   end
+  system('clear') || system('cls')
   answer.downcase.start_with?('y') ? true : false
-end
-
-def puts_with_newline(msg)
-  puts "#{msg}\n\n"
 end
 
 system('clear') || system('cls')
 puts "Welcome to the game of Twenty-One."
+puts_with_newline("Try to make the total value of your cards " \
+                  "as close to 21 as you can without going over.")
 
 loop do
-  puts_with_newline("Try to beat the dealer's hand without going bust!")
+  puts_with_newline(prompt("Beat the dealer's hand without going bust!"))
 
   deck = initialize_deck
   hands = initialize_hand
@@ -131,6 +142,7 @@ loop do
   loop do
     break if bust?(players_total)
 
+    declare_current_score("Player", players_total)
     prompt("Would you like to 'hit' or 'stay'?")
     answer = gets.chomp
 
@@ -155,16 +167,20 @@ loop do
   if bust?(players_total)
     system('clear') || system('cls')
     display_cards(hands['player'], "You have")
+    declare_current_score("Player", players_total)
     display_busted("Dealer", "You're")
     play_again? ? next : break
   end
 
+  system('clear') || system('cls')
+  display_cards(hands['player'], "You have")
+  declare_current_score("Player", players_total)
+
   loop do
-    display_cards(hands['player'], "You have")
     display_cards(hands['dealer'], "Dealer has")
+    declare_current_score("Dealer", dealers_total)
 
     break if dealers_total >= 17
-    system('clear') || system('cls')
 
     deal_card!(deck, hands, 'dealer')
     puts_with_newline("Dealer hands itself a card.")
@@ -174,13 +190,13 @@ loop do
   if bust?(dealers_total)
     system('clear') || system('cls')
     display_cards(hands['dealer'], "Dealer has")
+    declare_current_score("Dealer", dealers_total)
     display_busted("Player", "Dealer's")
     play_again? ? next : break
   end
 
   declare_winner(players_total, dealers_total)
   break unless play_again?
-  system('clear') || system('cls')
 end
 
 puts "Thank you for playing. Goodbye!"
