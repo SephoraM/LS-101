@@ -52,7 +52,7 @@ end
 
 def calculate_card_value(card)
   case card
-  when 'king', 'jack', 'queen'  then 10
+  when 'king', 'jack', 'queen' then 10
   else card
   end
 end
