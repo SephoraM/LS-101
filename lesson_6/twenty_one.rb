@@ -52,9 +52,7 @@ end
 
 def calculate_card_value(card)
   case card
-  when 'king'  then 10
-  when 'jack'  then 10
-  when 'queen' then 10
+  when 'king', 'jack', 'queen'  then 10
   else card
   end
 end
@@ -80,9 +78,9 @@ def display_first_card(dealer_hand)
   puts "Dealer has a #{dealer_hand[0][1]} of #{dealer_hand[0][0]}.\n\n"
 end
 
-def display_cards(hand, person_has)
+def display_cards(hand, person)
   hand.each do |card|
-    puts "#{person_has} a #{card[1]} of #{card[0]}."
+    puts "#{person} a #{card[1]} of #{card[0]}."
   end
   puts "\n"
 end
@@ -91,15 +89,23 @@ def display_busted(other_person, loser)
   puts "#{loser} Busted! #{other_person} Wins!"
 end
 
-def busted_sequence(prefix, current_player, opponent, total, hands)
+def clear
   system('clear') || system('cls')
+end
+
+def busted_sequence(prefix, current_player, opponent, total, hands)
+  clear
   display_cards(hands[current_player], prefix)
   declare_current_score(current_player.capitalize, total)
   display_busted(opponent.capitalize, prefix)
 end
 
+def keep_score(person, scorebrd)
+  scorebrd[person.downcase] += 1 unless person == 'tie'
+end
+
 def busted_scoreboard!(opponent, scorebrd)
-  scorebrd[opponent] += 1
+  keep_score(opponent, scorebrd)
   display_games_won(scorebrd)
   end_match!(scorebrd) if five?(scorebrd)
 end
@@ -139,12 +145,8 @@ def play_again?
     break if answer.downcase.start_with?('y', 'n')
     prompt("That's not a valid answer. Try again.")
   end
-  system('clear') || system('cls')
-  answer.downcase.start_with?('y') ? true : false
-end
-
-def keep_score(winner, scorebrd)
-  scorebrd[winner.downcase] += 1 unless winner == 'tie'
+  clear
+  answer.downcase.start_with?('y')
 end
 
 def five?(scorebrd)
@@ -171,7 +173,7 @@ def end_match!(scorebrd)
   scorebrd['dealer'] = 0
 end
 
-system('clear') || system('cls')
+clear
 puts "Welcome to the game of Twenty-One."
 puts_with_newline("Try to make the total value of your cards as " \
                   "close to #{MAX_TOTAL_VALUE} as you can without going over.")
@@ -198,7 +200,7 @@ loop do
     answer = gets.chomp
 
     if answer.downcase == 'hit'
-      system('clear') || system('cls')
+      clear
 
       deal_card!(deck, hands, 'player')
 
@@ -221,7 +223,7 @@ loop do
     play_again? ? next : break
   end
 
-  system('clear') || system('cls')
+  clear
   display_cards(hands['player'], "You have")
   declare_current_score("Player", players_total)
 
