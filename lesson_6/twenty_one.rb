@@ -91,6 +91,17 @@ def display_busted(other_person, loser)
   puts "#{loser} Busted! #{other_person} Wins!"
 end
 
+def busted!(prefix, current_player, opponent, total, scorebrd, hands)
+  system('clear') || system('cls')
+  display_cards(hands[current_player], prefix)
+  declare_current_score(current_player.capitalize, total)
+  display_busted(opponent.capitalize, prefix)
+
+  scorebrd[opponent] += 1
+  display_games_won(scorebrd)
+  end_match!(scorebrd) if five?(scorebrd)
+end
+
 def find_winner(player, dealer)
   if player == dealer
     'tie'
@@ -203,14 +214,7 @@ loop do
   end
 
   if bust?(players_total)
-    system('clear') || system('cls')
-    display_cards(hands['player'], "You have")
-    declare_current_score("Player", players_total)
-    display_busted("Dealer", "You're")
-
-    scoreboard['dealer'] += 1
-    display_games_won(scoreboard)
-    end_match!(scoreboard) if five?(scoreboard)
+    busted!('You have', 'player', 'dealer', players_total, scoreboard, hands)
     play_again? ? next : break
   end
 
@@ -230,14 +234,7 @@ loop do
   end
 
   if bust?(dealers_total)
-    system('clear') || system('cls')
-    display_cards(hands['dealer'], "Dealer has")
-    declare_current_score("Dealer", dealers_total)
-    display_busted("Player", "Dealer's")
-
-    scoreboard['player'] += 1
-    display_games_won(scoreboard)
-    end_match!(scoreboard) if five?(scoreboard)
+    busted!('Dealer has', 'dealer', 'player', dealers_total, scoreboard, hands)
     play_again? ? next : break
   end
 
