@@ -71,14 +71,19 @@ def find_strategic_move(brd, current_player)
   winning_move.empty? ? nil : winning_move[0][0]
 end
 
-def find_next_move(brd)
-  brd[5] == INITIAL_MARKER ? 5 : empty_squares(brd).sample
+def choose_center_square(brd)
+  5 if brd[5] == INITIAL_MARKER
+end
+
+def choose_random_square
+  empty_squares(brd).sample
 end
 
 def ai_places_piece!(brd)
-  selected_move = find_strategic_move(brd, COMPUTER_MARKER)
-  selected_move = find_strategic_move(brd, PLAYER_MARKER) unless selected_move
-  selected_move = selected_move ? selected_move : find_next_move(brd)
+  selected_move = find_strategic_move(brd, COMPUTER_MARKER) ||
+                    find_strategic_move(brd, PLAYER_MARKER) ||
+                    choose_center_square(brd) ||
+                    choose_random_square(brd)
   brd[selected_move] = COMPUTER_MARKER
 end
 
