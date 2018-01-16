@@ -91,12 +91,14 @@ def display_busted(other_person, loser)
   puts "#{loser} Busted! #{other_person} Wins!"
 end
 
-def busted!(prefix, current_player, opponent, total, scorebrd, hands)
+def busted_sequence(prefix, current_player, opponent, total, hands)
   system('clear') || system('cls')
   display_cards(hands[current_player], prefix)
   declare_current_score(current_player.capitalize, total)
   display_busted(opponent.capitalize, prefix)
+end
 
+def busted_scoreboard!(opponent, scorebrd)
   scorebrd[opponent] += 1
   display_games_won(scorebrd)
   end_match!(scorebrd) if five?(scorebrd)
@@ -214,7 +216,8 @@ loop do
   end
 
   if bust?(players_total)
-    busted!('You have', 'player', 'dealer', players_total, scoreboard, hands)
+    busted_sequence('You have', 'player', 'dealer', players_total, hands)
+    busted_scoreboard!('dealer', scoreboard)
     play_again? ? next : break
   end
 
@@ -234,7 +237,8 @@ loop do
   end
 
   if bust?(dealers_total)
-    busted!('Dealer has', 'dealer', 'player', dealers_total, scoreboard, hands)
+    busted_sequence('Dealer has', 'dealer', 'player', dealers_total, hands)
+    busted_scoreboard!('player', scoreboard)
     play_again? ? next : break
   end
 
